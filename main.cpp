@@ -18,7 +18,7 @@ int main()
 	//figure out a randomizer to start -> different methods?
 	Players[0].SetDealer(true);
 
-	//the magic number :eyes:
+	//the magic number technically 7 but lets double it :eyes:
 	for(unsigned int i = 0; i < 14; i++)
 		mainDeck.ShuffleDeck(mainDeck.CheckDeckList());
 	mainDeck.DealToKitty();
@@ -46,8 +46,7 @@ int main()
 	//to compare
 	//dont really care about deck anymore. it still exists so it can be used for next hand but as of right now it's irrelevant
 	//also kitty is technically "hidden". nobody knows whats in it until bid is set.
-	mainDeck.OutputDeckList();
-	std::cout << "\n\n\n";
+	//mainDeck.OutputDeckList();
 	mainDeck.OutputKitty();
 
 	return 0;

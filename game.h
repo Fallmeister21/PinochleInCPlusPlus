@@ -20,11 +20,16 @@
 			void BuildBid(Player & player);
 			void BuildStrength(Player & player);
 			void BuildConfidence(Player & player);
+			void SetTrump();
+			//used at new game instance as well
+			void NewHand();
 		private:
 			std::vector<Player> GamePlayers;
 			std::string currentTrump;
 			int gamePrice;
 			int holePrice;
+			std::pair<std::string, bool> trumpSet;
+			
 	};
 
 #endif

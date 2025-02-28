@@ -40,23 +40,22 @@ void Player::SortHand()
 		tempSuit = suitVector[i];
 		//dont sort the suit if you dont have it :)
 		if(std::find_if(sortingHand.begin(), sortingHand.end(), [&tempSuit](Card &a)
-			{ return a.GetSuit() == tempSuit; }) != sortingHand.end())
+					   { return a.GetSuit() == tempSuit; }) != sortingHand.end()   )
 		{
 			auto lastSpot = std::find_if(sortingHand.rbegin(), sortingHand.rend(), [&tempSuit](Card &a)
-			{ return a.GetSuit() == tempSuit; });
+										{ return a.GetSuit() == tempSuit; });
 			auto firstSpot = std::find_if(sortingHand.begin(), sortingHand.end(), [&tempSuit](Card &a)
-			{ return a.GetSuit() == tempSuit; });
+										{ return a.GetSuit() == tempSuit; });
+
+			std::sort(firstSpot, lastSpot.base(), [](Card &a, Card &b) { return a.GetRank() < b.GetRank(); });
 
 			//store first and last spot for checking meld :)
-			std::pair<int, int> suitRegion = std::make_pair(firstSpot->GetRank(), lastSpot->GetRank());
+			std::vector<int> suitRegion;
+			suitRegion.push_back(firstSpot - sortingHand.begin());
+			suitRegion.push_back((std::distance(sortingHand.begin(), lastSpot.base())) - 1);
 			suitRegions.push_back(suitRegion);
-
-			std::sort(firstSpot, lastSpot.base(), [](Card &a, Card &b){
-				return a.GetRank() < b.GetRank();
-			});
 		}
 	}
-
 
 	this->Hand = sortingHand;
 }
@@ -71,11 +70,28 @@ void Player::ShowHand()
 
 void Player::SetScore(int newScore) { score = newScore; }
 
+void Player::SetMeld(int inMeld) { totalMeld = inMeld; }
+
+void Player::SetSuitMeld(int inMeld,std::string suit)
+{
+	std::pair<std::string,int> inMeldWSuit = std::make_pair(suit, inMeld); 
+	suitMeld.push_back(inMeldWSuit); 
+}
+
 void Player::SetMoney(int newMoney) { money = newMoney; }
 
 void Player::SetDealer(bool newDealer) { isDealer = newDealer; }
 
 int Player::GetScore() { return score; }
+
+int Player::GetSuitMeld(std::string suit) 
+{ 
+	auto suitSpot = std::find_if(suitMeld.begin(), suitMeld.end(),
+				[&](const auto& pair) { return pair.first == suit; });
+	return suitSpot->second;
+}
+
+int Player::GetMeld() { return totalMeld; }
 
 int Player::GetMoney() { return money; }
 
@@ -83,4 +99,4 @@ bool Player::GetDealer() { return isDealer; }
 
 std::vector<Card> Player::GetHand() { return Hand; }
 
-std::vector<std::pair<int,int>> Player::GetSuitRegions() { return suitRegions; }
+std::vector<std::vector<int>> Player::GetSuitRegions() { return suitRegions; }

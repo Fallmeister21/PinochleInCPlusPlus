@@ -145,10 +145,6 @@ void Deck::DealToKitty()
 	}
 	//double check spots
 	std::sort(this->kittySpots.begin(), this->kittySpots.end());
-	std::cout << "Kitty Spots: ";
-	for(int i=0; i < this->kittySpots.size(); i++)
-		std::cout << this->kittySpots[i] << " ";
-	std::cout << std::endl;
 }
 
 std::unordered_map<int, Card> Deck::CheckDeckList()
