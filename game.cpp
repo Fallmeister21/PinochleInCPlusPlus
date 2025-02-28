@@ -14,21 +14,16 @@ int Game::CheckMeld(Player & player)
 	std::vector<Card> cardsToCheck = player.GetHand();
 	//look through hand
 	auto regionsToCheck = player.GetSuitRegions();
-	for(int i = 0; i < regionsToCheck.size(); ++i)
+	std::vector<std::string> suitList = {"Club", "Diamond", "Heart", "Spade"};
+	for(int i = 0; i < suitList.size(); ++i)
 	{
 		//find meld:
-		//if run
-		//if marriage
-			//if trump suit marriage
-		//if pinochle
-			//if double
-		//if aces
-		//if kings
-		//if queens
-		//if jacks
-		//if trump set
-			//if any 9's in trump suit
-
+		std::vector<Card> meldToCheck;
+		meldToCheck = CheckRun(suitList[i]);
+		auto firstElement = cardsToCheck.begin() + regionsToCheck[i][0];
+		auto secondElement = cardsToCheck.begin() + regionsToCheck[i][1];
+		std::vector<Card> newCardsToCheck(firstElement,secondElement);
+		//check the new cardList
 		//add scores to find total meld
 		//redo scores (but dont double them!) when trump is set
 	}
