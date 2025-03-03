@@ -1,5 +1,15 @@
 #include "game.h"
 
+bool isSubsetOrEqual(std::vector<int> const& a, std::vector<int> const& b) {
+	for(auto const& av:a){
+		if(std::find(b.begin(),b.end(),av)!=b.end())
+			continue;
+		else
+			return false;
+	}
+	return true;
+ }
+
 Game::Game(std::vector<Player> inPlayers)
 {
 	GamePlayers = inPlayers;
@@ -12,21 +22,59 @@ Game::~Game() { /* delete players vector? */ }
 int Game::CheckMeld(Player & player)
 {
 	std::vector<Card> cardsToCheck = player.GetHand();
+	std::vector<int> baseRanksToCheck = PUtil::GetVectorofRanks(cardsToCheck);
 	//look through hand
 	auto regionsToCheck = player.GetSuitRegions();
 	std::vector<std::string> suitList = {"Club", "Diamond", "Heart", "Spade"};
+	//find meld:
+	std::vector<Card> meldToCheck;
+	std::vector<int> newMeldRanks;
 	for(int i = 0; i < suitList.size(); ++i)
 	{
-		//find meld:
-		std::vector<Card> meldToCheck;
-		meldToCheck = CheckRun(suitList[i]);
-		auto firstElement = cardsToCheck.begin() + regionsToCheck[i][0];
-		auto secondElement = cardsToCheck.begin() + regionsToCheck[i][1];
+		if(regionsToCheck[i][0] == -1 && regionsToCheck[i][1] == -1)
+			continue;
+		std::vector<Card>::iterator firstElement = cardsToCheck.begin() + regionsToCheck[i][0];
+		std::vector<Card>::iterator secondElement = cardsToCheck.begin() + regionsToCheck[i][1] + 1;
 		std::vector<Card> newCardsToCheck(firstElement,secondElement);
-		//check the new cardList
+		std::vector<int> newCardRanks = PUtil::GetVectorofRanks(newCardsToCheck);
+		
+		//check run
+		meldToCheck = CheckRun(suitList[i]);
+		newMeldRanks = PUtil::GetVectorofRanks(meldToCheck);
+		if(isSubsetOrEqual(newMeldRanks, newCardRanks))
+			std::cout << "Run in " << suitList[i] << "\n";
+		meldToCheck.clear();
+
+		//check marriages
+		meldToCheck = CheckMarriage(suitList[i]);
+		newMeldRanks = PUtil::GetVectorofRanks(meldToCheck);
+		if(isSubsetOrEqual(newMeldRanks, newCardRanks))
+			std::cout << "Marriage in " << suitList[i] << "\n";
+		meldToCheck.clear();
+		//check nines (only if suit is trump)
+
 		//add scores to find total meld
 		//redo scores (but dont double them!) when trump is set
 	}
+
+	//check pinochle
+	meldToCheck = CheckPinochle();
+	newMeldRanks = PUtil::GetVectorofRanks(meldToCheck);
+	if(isSubsetOrEqual(baseRanksToCheck, newMeldRanks))
+		std::cout << "Pinochle found" << "\n";
+	meldToCheck.clear();
+
+	//check around
+	for(int j = 11; j < 15; ++j)
+	{
+		meldToCheck = CheckAround(j);
+		newMeldRanks = PUtil::GetVectorofRanks(meldToCheck);
+		if(isSubsetOrEqual(baseRanksToCheck, newMeldRanks))
+			std::cout << "Around found at rank " << j << "\n";
+		meldToCheck.clear();
+	}
+	//dont forget to return the meld duh
+	return 1;
 }
 
 //check # of cards in each suit
@@ -96,7 +144,7 @@ void Game::NewHand()
 //at this point, hands are already "sorted" so checking meld here is also "sorted", so comparison can be made easily :)
 //to check doubles, call twice and sort
 //ex-> double_aces.pushback(checkaces) \n double_aces.pushback(checkaces) \n sort double_aces and check against suit range in hand
-std::vector<Card> CheckRun(std::string suit)
+std::vector<Card> Game::CheckRun(std::string suit)
 {
 	std::vector<Card> RunSet;
 	//dont check 9's yet
@@ -110,7 +158,7 @@ std::vector<Card> CheckRun(std::string suit)
 	return RunSet;
 }
 
-std::vector<Card> CheckMarriage(std::string suit)
+std::vector<Card> Game::CheckMarriage(std::string suit)
 {
 	std::vector<Card> MarriageSet;
 	Card tempCard;
@@ -123,7 +171,7 @@ std::vector<Card> CheckMarriage(std::string suit)
 	return MarriageSet;
 }
 
-std::vector<Card> CheckPinochle()
+std::vector<Card> Game::CheckPinochle()
 {
 	std::vector<Card> PinochleSet;
 	Card tempCard;
@@ -137,7 +185,7 @@ std::vector<Card> CheckPinochle()
 	return PinochleSet;
 }
 
-std::vector<Card> CheckAround(int checkRank)
+std::vector<Card> Game::CheckAround(int checkRank)
 {
 	std::vector<Card> AroundSet;
 	Card tempCard;
@@ -154,7 +202,7 @@ std::vector<Card> CheckAround(int checkRank)
 }
 
 // :skull:
-std::vector<Card> CheckNines(std::string suit)
+std::vector<Card> Game::CheckNines(std::string suit)
 {
 	std::vector<Card> NinesSet;
 	Card tempCard;

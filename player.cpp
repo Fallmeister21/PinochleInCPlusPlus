@@ -38,6 +38,7 @@ void Player::SortHand()
 	for(int i = 0; i < suitVector.size();i ++)
 	{
 		tempSuit = suitVector[i];
+		std::vector<int> suitRegion;
 		//dont sort the suit if you dont have it :)
 		if(std::find_if(sortingHand.begin(), sortingHand.end(), [&tempSuit](Card &a)
 					   { return a.GetSuit() == tempSuit; }) != sortingHand.end()   )
@@ -50,9 +51,14 @@ void Player::SortHand()
 			std::sort(firstSpot, lastSpot.base(), [](Card &a, Card &b) { return a.GetRank() < b.GetRank(); });
 
 			//store first and last spot for checking meld :)
-			std::vector<int> suitRegion;
 			suitRegion.push_back(firstSpot - sortingHand.begin());
 			suitRegion.push_back((std::distance(sortingHand.begin(), lastSpot.base())) - 1);
+			suitRegions.push_back(suitRegion);
+		}
+		else
+		{
+			suitRegion.push_back(-1);
+			suitRegion.push_back(-1);
 			suitRegions.push_back(suitRegion);
 		}
 	}

@@ -3,6 +3,8 @@
 
 #include <vector>
 #include <string>
+#include <algorithm>
+#include "util.h"
 #include "player.h"
 
 	class Game
@@ -23,13 +25,19 @@
 			void SetTrump();
 			//used at new game instance as well
 			void NewHand();
+			
 		private:
 			std::vector<Player> GamePlayers;
 			std::string currentTrump;
 			int gamePrice;
 			int holePrice;
 			std::pair<std::string, bool> trumpSet;
-			
-	};
+			//meld checks
+			std::vector<Card> CheckRun(std::string suit);
+			std::vector<Card> CheckMarriage(std::string suit);
+			std::vector<Card> CheckPinochle();
+			std::vector<Card> CheckAround(int checkRank);
+			std::vector<Card> CheckNines(std::string suit);
+		};
 
 #endif

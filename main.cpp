@@ -1,6 +1,7 @@
 #include "player.h"
 #include "card.h"
 #include "deck.h"
+#include "util.h"
 #include "game.h"
 #include <vector>
 #include <string>
@@ -33,6 +34,9 @@ int main()
 		Players[i].SortHand();
 		Players[i].ShowHand();
 		playersSuitCounts.push_back(CurrentGame.CheckSuitCount(Players[i]));
+		std::cout << "Meld for player " << i << "\n";
+		CurrentGame.CheckMeld(Players[i]);
+		std::cout << "\n\n\n";
 	}
 
 	for(unsigned int i = 0; i < playersSuitCounts.size(); i++)
