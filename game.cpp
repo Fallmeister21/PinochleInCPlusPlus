@@ -37,7 +37,12 @@ int Game::CheckMeld(Player & player)
 	for(int i = 0; i < suitList.size(); ++i)
 	{
 		if(regionsToCheck[i][0] == -1 && regionsToCheck[i][1] == -1)
+		{
+			//dont forget to set meld if they dont have any in that suit
+			player.SetSuitMeld(0, suitList[i]);
+			std::cout << "Skipping suit " << suitList[i] << "\n\n";
 			continue;
+		}
 		//to check just the suit i want
 		std::vector<Card>::iterator firstElement = cardsToCheck.begin() + regionsToCheck[i][0];
 		std::vector<Card>::iterator secondElement = cardsToCheck.begin() + regionsToCheck[i][1] + 1;
