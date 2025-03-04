@@ -1,7 +1,8 @@
 #include "game.h"
 
 bool isSubsetOrEqual(std::vector<int> const& a, std::vector<int> const& b) {
-	for(auto const& av:a){
+	for(auto const& av:a)
+	{
 		if(std::find(b.begin(),b.end(),av)!=b.end())
 			continue;
 		else
@@ -23,46 +24,71 @@ int Game::CheckMeld(Player & player)
 {
 	std::vector<Card> cardsToCheck = player.GetHand();
 	std::vector<int> baseRanksToCheck = PUtil::GetVectorofRanks(cardsToCheck);
+
 	//look through hand
 	auto regionsToCheck = player.GetSuitRegions();
 	std::vector<std::string> suitList = {"Club", "Diamond", "Heart", "Spade"};
+
 	//find meld:
 	std::vector<Card> meldToCheck;
 	std::vector<int> newMeldRanks;
+	int potentialMeld;
 	for(int i = 0; i < suitList.size(); ++i)
 	{
 		if(regionsToCheck[i][0] == -1 && regionsToCheck[i][1] == -1)
 			continue;
+		//to check just the suit i want
 		std::vector<Card>::iterator firstElement = cardsToCheck.begin() + regionsToCheck[i][0];
 		std::vector<Card>::iterator secondElement = cardsToCheck.begin() + regionsToCheck[i][1] + 1;
 		std::vector<Card> newCardsToCheck(firstElement,secondElement);
 		std::vector<int> newCardRanks = PUtil::GetVectorofRanks(newCardsToCheck);
+		bool hasRun = false;
 		
+		potentialMeld = 0;
+
 		//check run
 		meldToCheck = CheckRun(suitList[i]);
 		newMeldRanks = PUtil::GetVectorofRanks(meldToCheck);
 		if(isSubsetOrEqual(newMeldRanks, newCardRanks))
-			std::cout << "Run in " << suitList[i] << "\n";
-		meldToCheck.clear();
+		{
+			hasRun = true;
+			potentialMeld += 15;
+		}
 
 		//check marriages
 		meldToCheck = CheckMarriage(suitList[i]);
 		newMeldRanks = PUtil::GetVectorofRanks(meldToCheck);
 		if(isSubsetOrEqual(newMeldRanks, newCardRanks))
-			std::cout << "Marriage in " << suitList[i] << "\n";
-		meldToCheck.clear();
-		//check nines (only if suit is trump)
+		{
+			//if trump is set
+			if(trumpSet.second || hasRun)
+				potentialMeld += 4;
+			else if(!hasRun)
+				potentialMeld += 2;
+		}
 
-		//add scores to find total meld
+		//check nines (only if suit is trump) -> not set yet
+		if(trumpSet.second)
+		{
+			meldToCheck = CheckNines(suitList[i]);
+			newMeldRanks = PUtil::GetVectorofRanks(meldToCheck);
+			if(isSubsetOrEqual(newMeldRanks, newCardRanks))
+				potentialMeld++;
+		}
+
 		//redo scores (but dont double them!) when trump is set
+		player.SetSuitMeld(potentialMeld, suitList[i]);
 	}
-
+	
+	potentialMeld = 0;
 	//check pinochle
 	meldToCheck = CheckPinochle();
 	newMeldRanks = PUtil::GetVectorofRanks(meldToCheck);
 	if(isSubsetOrEqual(baseRanksToCheck, newMeldRanks))
-		std::cout << "Pinochle found" << "\n";
-	meldToCheck.clear();
+	{
+		//check for double at some point
+		potentialMeld += 4;
+	}
 
 	//check around
 	for(int j = 11; j < 15; ++j)
@@ -70,9 +96,19 @@ int Game::CheckMeld(Player & player)
 		meldToCheck = CheckAround(j);
 		newMeldRanks = PUtil::GetVectorofRanks(meldToCheck);
 		if(isSubsetOrEqual(baseRanksToCheck, newMeldRanks))
-			std::cout << "Around found at rank " << j << "\n";
-		meldToCheck.clear();
+		{
+			//bruh
+			if(j == 11)
+				potentialMeld += 4;
+			else if(j == 12)
+				potentialMeld += 6;
+			else if(j == 13)
+				potentialMeld += 8;
+			else if(j == 14)
+				potentialMeld += 10;
+		}
 	}
+	player.SetSuitMeld(potentialMeld, "General");
 	//dont forget to return the meld duh
 	return 1;
 }

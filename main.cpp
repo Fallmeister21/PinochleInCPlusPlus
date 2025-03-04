@@ -34,17 +34,18 @@ int main()
 		Players[i].SortHand();
 		Players[i].ShowHand();
 		playersSuitCounts.push_back(CurrentGame.CheckSuitCount(Players[i]));
-		std::cout << "Meld for player " << i << "\n";
 		CurrentGame.CheckMeld(Players[i]);
-		std::cout << "\n\n\n";
 	}
 
-	for(unsigned int i = 0; i < playersSuitCounts.size(); i++)
+	std::vector<std::string> suitVector = {"Club", "Diamond", "Heart", "Spade", "General"};
+	for(unsigned int i = 0; i < Players.size(); i++)
 	{
-		std::cout << "Counts for player " << i << ": Club,Diamond,Heart,Spade" << std::endl;
-		for(int j = 0; j < playersSuitCounts[i].size(); j++)
-			std::cout << playersSuitCounts[i][j] << " ";
-		std::cout << std::endl << std::endl;
+		std::cout << "Checking player " << i << "'s meld\n";
+		for(unsigned int j = 0; j < suitVector.size(); j++)
+		{
+			std::cout << "Meld for suit: " << suitVector[j] << " " << Players[i].GetSuitMeld(suitVector[j]) << "\n";
+		}
+		std::cout << "\n";
 	}
 
 	//to compare
