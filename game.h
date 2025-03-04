@@ -22,7 +22,7 @@
 			void BuildBid(Player & player);
 			void BuildStrength(Player & player);
 			void BuildConfidence(Player & player);
-			void SetTrump();
+			void SetTrump(std::string _trumpSuit);
 			//used at new game instance as well
 			void NewHand();
 			

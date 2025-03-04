@@ -84,6 +84,18 @@ void Player::SetSuitMeld(int inMeld,std::string suit)
 	suitMeld.push_back(inMeldWSuit); 
 }
 
+void Player::SetSuitStrength(int inStrength, std::string suit)
+{
+	std::pair<std::string,int> inStrWSuit = std::make_pair(suit, inStrength);
+	suitStrength.push_back(inStrWSuit);
+}
+
+void Player::SetSuitConfidence(int inConfidence, std::string suit)
+{
+	std::pair<std::string,int> inConWSuit = std::make_pair(suit, inConfidence);
+	suitConfidence.push_back(inConWSuit);
+}
+
 void Player::SetMoney(int newMoney) { money = newMoney; }
 
 void Player::SetDealer(bool newDealer) { isDealer = newDealer; }

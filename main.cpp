@@ -27,13 +27,10 @@ int main()
 	if(Players.size() == 3)
 		mainDeck.DealThreeHandDeck(mainDeck.CheckDeckList(), Players);
 
-	//testing shhhhhhh
-	std::vector<std::vector<int>> playersSuitCounts;
 	for(unsigned int i = 0; i < Players.size(); i++)
 	{
 		Players[i].SortHand();
 		Players[i].ShowHand();
-		playersSuitCounts.push_back(CurrentGame.CheckSuitCount(Players[i]));
 		CurrentGame.CheckMeld(Players[i]);
 	}
 
@@ -42,9 +39,7 @@ int main()
 	{
 		std::cout << "Checking player " << i << "'s meld\n";
 		for(unsigned int j = 0; j < suitVector.size(); j++)
-		{
 			std::cout << "Meld for suit: " << suitVector[j] << " " << Players[i].GetSuitMeld(suitVector[j]) << "\n";
-		}
 		std::cout << "\n";
 	}
 

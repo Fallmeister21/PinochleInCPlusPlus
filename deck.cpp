@@ -47,7 +47,7 @@ void Deck::OutputKitty()
 	    it != this->Kitty.end(); ++it)
 	{
 		std::pair<int,Card> currentPair = *it;
-		std::cout << " " << currentPair.second.GetRank() << " " << currentPair.second.GetSuit() << "\n";
+		std::cout << currentPair.second.GetRank() << " " << currentPair.second.GetSuit() << "\n";
 	}
 	return;
 }

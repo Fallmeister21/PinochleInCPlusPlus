@@ -1,6 +1,7 @@
 #include "game.h"
 
-bool isSubsetOrEqual(std::vector<int> const& a, std::vector<int> const& b) {
+bool isSubsetOrEqual(std::vector<int> const& a, std::vector<int> const& b)
+{
 	for(auto const& av:a)
 	{
 		if(std::find(b.begin(),b.end(),av)!=b.end())
@@ -9,7 +10,7 @@ bool isSubsetOrEqual(std::vector<int> const& a, std::vector<int> const& b) {
 			return false;
 	}
 	return true;
- }
+}
 
 Game::Game(std::vector<Player> inPlayers)
 {
@@ -142,10 +143,22 @@ std::vector<int> Game::CheckSuitCount(Player & player)
 
 //check strong cards
 //Objectively -> A, 10, K, Q, J, 9
-//Determine a system that will help build a strength value for each suit
 std::vector<int> Game::CheckStrong(Player & player)
 {
+	int suitStrength = 0;
+	auto regionsToCheck = player.GetSuitRegions();
+	std::vector<Card> cardsToCheck = player.GetHand();
+	std::vector<std::string> tempSuit = { "Club", "Diamond", "Heart", "Spade"};
 
+	//get ranges also to only check what player has
+	for(int i = 0; i < tempSuit.size(); i++)
+	{
+		if(regionsToCheck[i][0] == -1 && regionsToCheck[i][1] == -1)
+			continue;
+		for(int j = regionsToCheck[i][0]; j < regionsToCheck[i][1]; j++)
+			suitStrength += cardsToCheck[i].GetRank() * 10; //idk mb something better
+		player.SetSuitStrength(suitStrength, tempSuit[i]);
+	}
 }
 
 //calls build strength and build confidence
@@ -164,10 +177,10 @@ void Game::BuildConfidence(Player & player)
 
 }
 
-void Game::SetTrump()
+void Game::SetTrump(std::string _trumpSuit)
 {
 	//for now :)
-	trumpSet = std::make_pair("None",true);
+	trumpSet = std::make_pair(_trumpSuit,true);
 }
 
 //used at new game instance as well

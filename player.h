@@ -17,7 +17,9 @@
 			void ShowHand();
 			void SetScore(int newScore);
 			void SetMeld(int inMeld);
-			void SetSuitMeld(int inMeld,std::string suit);
+			void SetSuitMeld(int inMeld, std::string suit);
+			void SetSuitStrength(int inStrength, std::string suit);
+			void SetSuitConfidence(int inConfidence, std::string suit);
 			void SetMoney(int newMoney);
 			void SetDealer(bool newDealer);
 			int  GetScore();
@@ -39,7 +41,8 @@
 			bool isDealer;
 			//for meld
 			std::vector<std::vector<int>> suitRegions;
-			std::vector<int> suitConfidence;
+			std::vector<std::pair<std::string,int>> suitConfidence;
+			std::vector<std::pair<std::string,int>> suitStrength;
 			int bid;
 			int handMeld;
 			int handStrength;
