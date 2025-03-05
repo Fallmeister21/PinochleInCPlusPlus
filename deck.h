@@ -3,14 +3,9 @@
 
 #include "card.h"
 #include "player.h"
-#include <string>
+
 #include <vector>
 #include <unordered_map>
-#include <iostream>
-#include <chrono>
-#include <random>
-#include <cstdlib>
-#include <set>
 
 	//also acts as a dealer/reporter
 	//arguably, the deck shouldnt know what the counts are as that should be left to the player

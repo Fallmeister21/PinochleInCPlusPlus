@@ -2,10 +2,9 @@
 #define PPLAYER_H
 
 #include "card.h"
+
 #include <string>
 #include <vector>
-#include <iostream>
-#include <algorithm>
 
 	class Player
 	{

@@ -1,5 +1,8 @@
 #include "game.h"
 
+#include <algorithm>
+#include <iostream>
+
 bool isSubsetOrEqual(std::vector<int> const& a, std::vector<int> const& b)
 {
 	for(auto const& av:a)

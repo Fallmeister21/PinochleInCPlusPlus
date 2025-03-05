@@ -1,9 +1,9 @@
 #ifndef PUTIL_H
 #define PUTIL_H
 
-#include <vector>
-#include <string>
 #include "card.h"
+
+#include <vector>
 
 namespace PUtil
 {

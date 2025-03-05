@@ -1,10 +1,12 @@
-#include "player.h"
 #include "card.h"
 #include "deck.h"
-#include "util.h"
 #include "game.h"
-#include <vector>
+#include "player.h"
+#include "util.h"
+
+#include <iostream>
 #include <string>
+#include <vector>
 
 int main()
 {

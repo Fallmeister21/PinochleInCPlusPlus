@@ -1,5 +1,8 @@
 #include "player.h"
 
+#include <algorithm>
+#include <iostream>
+
 Player::Player(int playercount, int inPlayerNum)
 {
 	money = 0;

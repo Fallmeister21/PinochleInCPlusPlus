@@ -1,5 +1,10 @@
 #include "deck.h"
 
+#include <algorithm>
+#include <chrono>
+#include <iostream>
+#include <random>
+
 Deck::Deck()
 {
 	int numDecks = 1;

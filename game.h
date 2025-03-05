@@ -1,11 +1,11 @@
 #ifndef PGAME_H
 #define PGAME_H
 
+#include "player.h"
+#include "util.h"
+
 #include <vector>
 #include <string>
-#include <algorithm>
-#include "util.h"
-#include "player.h"
 
 	class Game
 	{
