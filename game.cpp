@@ -15,6 +15,19 @@ bool isSubsetOrEqual(std::vector<int> const& a, std::vector<int> const& b)
 	return true;
 }
 
+bool isEqual(std::vector<int> const& a, std::vector<int> const& b)
+{
+	bool allGood = true;
+	for(auto const& av:a)
+	{
+		if(std::find(b.begin(),b.end(),av)!=b.end())
+			continue;
+		else
+			allGood = false;
+	}
+	return allGood;
+}
+
 Game::Game(std::vector<Player> inPlayers)
 {
 	GamePlayers = inPlayers;
@@ -93,29 +106,28 @@ int Game::CheckMeld(Player & player)
 	//check pinochle
 	meldToCheck = CheckPinochle();
 	newMeldRanks = PUtil::GetVectorofRanks(meldToCheck);
-	if(isSubsetOrEqual(baseRanksToCheck, newMeldRanks))
+	if(isEqual(newMeldRanks, baseRanksToCheck))
 	{
 		//check for double at some point
 		potentialMeld += 4;
 	}
 
 	//check around
+	//make a function that actually checks ranks and suits together since this only cares if you have 11's etc.
 	for(int j = 11; j < 15; ++j)
 	{
 		meldToCheck = CheckAround(j);
 		newMeldRanks = PUtil::GetVectorofRanks(meldToCheck);
-		if(isSubsetOrEqual(baseRanksToCheck, newMeldRanks))
-		{
-			//bruh
-			if(j == 11)
-				potentialMeld += 4;
-			else if(j == 12)
-				potentialMeld += 6;
-			else if(j == 13)
-				potentialMeld += 8;
-			else if(j == 14)
-				potentialMeld += 10;
-		}
+		//bruh
+		if(j == 11 && isEqual(baseRanksToCheck, newMeldRanks))
+			potentialMeld += 4;
+		else if(j == 12 && isEqual(baseRanksToCheck, newMeldRanks))
+			potentialMeld += 6;
+		else if(j == 13 && isEqual(baseRanksToCheck, newMeldRanks))
+			potentialMeld += 8;
+		else if(j == 14 && isEqual(baseRanksToCheck, newMeldRanks))
+			potentialMeld += 10;
+		meldToCheck.clear();
 	}
 	player.SetSuitMeld(potentialMeld, "General");
 	//dont forget to return the meld duh
